@@ -1,7 +1,8 @@
 from servicios import obtener_vecinos
 
 def DFS(inicio, meta, grilla):
-    pila = [(inicio, [inicio])]
+    # pila para guardar caminos a explorar
+    pila = [(inicio, [inicio])] # (una_posición, camino_para_llegar_a_ella)
     visitados = set()
     
     while pila:
@@ -12,6 +13,7 @@ def DFS(inicio, meta, grilla):
             continue
         visitados.add(actual)
         
+        # Buscar nuevos caminos
         for vecino in obtener_vecinos(actual, grilla):
             if vecino not in visitados:
                 pila.append((vecino, camino + [vecino]))

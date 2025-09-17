@@ -20,14 +20,15 @@ BROWN = (139, 69, 19)
 # === FUNCIONES DE GRILLA Y VECINOS ===
 
 def generar_grilla(n, k, probabilidad_muralla=0.3):
-    #Genera una grilla NxN aleatoria con murallas y k salidas
+    # Genera una grilla NxN aleatoria con murallas y k salidas
+    # Con el valor "1" todas las casillas son transitables (inicialmente)
     grilla = [[1 for _ in range(n)] for _ in range(n)]
     
     # Genera murallas
     for i in range(n):
         for j in range(n):
             if random.random() < probabilidad_muralla:
-                grilla[i][j] = 0                                 # (valor 0 representa muralla)
+                grilla[i][j] = 0 # (valor 0 representa muralla)
     
     # Se asegura de que el inicio y al menos k celdas sean usables (valor >= 1)
     inicio = (0, 0)
@@ -37,10 +38,11 @@ def generar_grilla(n, k, probabilidad_muralla=0.3):
     salidas = []
     intentos = 0
     while len(salidas) < k and intentos < 100:
-        i, j = random.randint(0, n-1), random.randint(0, n-1)
+        i = j = random.randint(0, n-1)
+        # Si la casilla NO ha sido designada como "estado de inicio" o "muralla"
         if (i, j) != inicio and grilla[i][j] != 0:
             salidas.append((i, j))
-            grilla[i][j] = random.randint(1, n//2)               # Asigna un valor de salto aleatorio a la salida
+            grilla[i][j] = random.randint(1, n//2) # Asigna un valor de salto aleatorio a la salida
         intentos += 1
     
     # Garantiza que la función cumpla con generar las k salidas después de los 100 intentos
@@ -61,7 +63,7 @@ def generar_grilla(n, k, probabilidad_muralla=0.3):
     return inicio, meta_valida, grilla, salidas
 
 def obtener_vecinos(posicion, grilla):
-    m, n = len(grilla), len(grilla[0])
+    m, n = len(grilla), len(grilla[0]) # filas y columnas
     i, j = posicion
     
     # Si es una muralla no tiene vecinos
@@ -69,17 +71,36 @@ def obtener_vecinos(posicion, grilla):
         return []
     
     salto = grilla[i][j]
-    direcciones = [(-salto, 0), (salto, 0), (0, -salto), (0, salto)]
-    vecinos = []
+    direcciones = [(-salto, 0), (salto, 0), (0, -salto), (0, salto)] # arriba, abajo, izq, der
     
+    vecinos = []
     for di, dj in direcciones:
         ni, nj = i + di, j + dj
-        if 0 <= ni < m and 0 <= nj < n and grilla[ni][nj] != 0:  # No saltar a murallas
-            vecinos.append((ni, nj))                             #añade esta estimación a la lista de vecinos
+
+        # Verificar que la posición esté dentro de los límites
+        if 0 <= ni < m and 0 <= nj < n:
+            if grilla[ni][nj] != 0: # Verificar que no sea una muralla
+                camino_libre = True # Verificar que el camino no tenga murallas
+                pasos = abs(di) + abs(dj) # verificar casillas en el camino del salto
+                if pasos > 1: 
+                    for paso in range(1, pasos):  # desde 1 hasta pasos-1
+                        # Calcular posición intermedia
+                        factor = paso / pasos
+                        paso_i = i + int(di * factor)
+                        paso_j = j + int(dj * factor)
+                        
+                        # Si hay una muralla en el camino, no se puede hacer el salto
+                        if grilla[paso_i][paso_j] == 0:
+                            camino_libre = False
+                            break
+                
+                # Solo agregar el vecino si el camino está libre
+                if camino_libre:
+                    vecinos.append((ni, nj))
     return vecinos
 
 def dibujar_grilla(pantalla, grilla, inicio, meta, salidas, camino, fuente, modo, indice, total, victoria):
-    filas, columnas = len(grilla), len(grilla[0])
+    filas = columnas = len(grilla) # NxN -> le damos el mismo valor a fila y columna
     pantalla.fill(WHITE)
 
     for i in range(filas):
