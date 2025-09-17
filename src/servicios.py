@@ -82,43 +82,6 @@ def obtener_vecinos(posicion, grilla):
                 vecinos.append((ni, nj))
     return vecinos
 
-def obtener_camino_salto(desde, hasta):
-    i1, j1 = desde
-    i2, j2 = hasta
-    
-    # Calcular la dirección y distancia del salto
-    di = i2 - i1
-    dj = j2 - j1
-    pasos = max(abs(di), abs(dj))
-    
-    # Si es un movimiento de 1 casilla, solo incluir el destino
-    if abs(di) <= 1 and abs(dj) <= 1:
-        return [hasta]
-
-    # Determinar la dirección y número de pasos
-    camino_salto = []
-    
-    if di == 0:  # Movimiento horizontal
-        pasos = abs(dj)
-        direccion_j = 1 if dj > 0 else -1
-        for paso in range(1, pasos + 1):
-            pos_i = i1
-            pos_j = j1 + (paso * direccion_j)
-            camino_salto.append((pos_i, pos_j))
-    elif dj == 0:  # Movimiento vertical
-        pasos = abs(di)
-        direccion_i = 1 if di > 0 else -1
-        for paso in range(1, pasos + 1):
-            pos_i = i1 + (paso * direccion_i)
-            pos_j = j1
-            camino_salto.append((pos_i, pos_j))
-    else:
-        # No debería ocurrir en este tipo de laberinto (solo movimientos cardinales)
-        return [hasta]
-    
-    return camino_salto
-
-
 def dibujar_grilla(pantalla, grilla, inicio, meta, salidas, camino, fuente, modo, indice, total, victoria):
     filas = columnas = len(grilla) # NxN -> le damos el mismo valor a fila y columna
     pantalla.fill(WHITE)
@@ -165,3 +128,19 @@ def dibujar_grilla(pantalla, grilla, inicio, meta, salidas, camino, fuente, modo
         texto_victoria = fuente.render("¡Victoria!", True, (0, 180, 0))
         texto_victoria_rect = texto_victoria.get_rect(center=(pantalla.get_width() // 2, pantalla.get_height() - 50))
         pantalla.blit(texto_victoria, texto_victoria_rect)
+
+def cambiar_murallas(grilla, inicio, meta, salidas, prob=0.1):
+    n = len(grilla)
+    i = j = random.randint(1, n-1) # Para tomar una casilla (i, j) aleatoria dentro de la grilla
+    # No mutar inicio ni meta ni las salidas ficticias
+    if (i, j) == inicio or (i, j) == meta or (i, j) in salidas:
+        return grilla
+    if grilla[i][j] == 0:
+        # Muralla puede abrirse
+        if random.random() < prob:
+            grilla[i][j] = random.randint(1, n//2)
+    else:
+        # Celda libre puede volverse muralla
+        if random.random() < prob:
+            grilla[i][j] = 0
+    return grilla
