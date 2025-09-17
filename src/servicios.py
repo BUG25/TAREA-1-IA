@@ -70,8 +70,7 @@ def obtener_vecinos(posicion, grilla):
     if grilla[i][j] == 0:
         return []
     
-    salto = grilla[i][j]
-    direcciones = [(-salto, 0), (salto, 0), (0, -salto), (0, salto)] # arriba, abajo, izq, der
+    direcciones = [(-1, 0), (1, 0), (0, -1), (0, 1)] # arriba, abajo, izq, der
     
     vecinos = []
     for di, dj in direcciones:
@@ -80,29 +79,10 @@ def obtener_vecinos(posicion, grilla):
         # Verificar que la posición esté dentro de los límites
         if 0 <= ni < m and 0 <= nj < n:
             if grilla[ni][nj] != 0: # Verificar que no sea una muralla
-                camino_libre = True # Verificar que el camino no tenga murallas
-                pasos = abs(di) + abs(dj) # verificar casillas en el camino del salto
-                if pasos > 1: 
-                    for paso in range(1, pasos):  # desde 1 hasta pasos-1
-                        # Calcular posición intermedia
-                        factor = paso / pasos
-                        paso_i = i + int(di * factor)
-                        paso_j = j + int(dj * factor)
-                        
-                        # Si hay una muralla en el camino, no se puede hacer el salto
-                        if grilla[paso_i][paso_j] == 0:
-                            camino_libre = False
-                            break
-                
-                # Solo agregar el vecino si el camino está libre
-                if camino_libre:
-                    vecinos.append((ni, nj))
+                vecinos.append((ni, nj))
     return vecinos
 
 def obtener_camino_salto(desde, hasta):
-    """
-    Genera todas las casillas intermedias en un salto desde 'desde' hasta 'hasta'
-    """
     i1, j1 = desde
     i2, j2 = hasta
     
@@ -156,10 +136,10 @@ def dibujar_grilla(pantalla, grilla, inicio, meta, salidas, camino, fuente, modo
                 color = BLUE
             elif (i, j) == meta:
                 color = GREEN
-            elif (i, j) in salidas and (i, j) != meta:
-                color = RED  # Salidas no válidas
             elif camino and (i, j) in camino:
                 color = YELLOW
+            elif (i, j) in salidas and (i, j) != meta:
+                color = RED  # Salidas no válidas
             else:
                 color = GRAY  # Celdas normales
 
