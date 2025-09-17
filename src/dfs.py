@@ -1,4 +1,4 @@
-from servicios import obtener_vecinos
+from servicios import obtener_vecinos, obtener_camino_salto
 
 def DFS(inicio, meta, grilla):
     # pila para guardar caminos a explorar
@@ -16,6 +16,13 @@ def DFS(inicio, meta, grilla):
         # Buscar nuevos caminos
         for vecino in obtener_vecinos(actual, grilla):
             if vecino not in visitados:
-                pila.append((vecino, camino + [vecino]))
+                casillas_salto = obtener_camino_salto(actual, vecino)
+
+                if meta in casillas_salto:
+                    idx = casillas_salto.index(meta)
+                    return camino + casillas_salto[:idx+1]
+                nuevo_camino = camino + casillas_salto
+                pila.append((vecino, nuevo_camino))
+                #visitados.add(vecino)
     
     return None

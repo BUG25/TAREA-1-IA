@@ -22,7 +22,7 @@ BROWN = (139, 69, 19)
 def generar_grilla(n, k, probabilidad_muralla=0.3):
     # Genera una grilla NxN aleatoria con murallas y k salidas
     # Con el valor "1" todas las casillas son transitables (inicialmente)
-    grilla = [[1 for _ in range(n)] for _ in range(n)]
+    grilla = [[random.randint(1, n//2) for _ in range(n)] for _ in range(n)]
     
     # Genera murallas
     for i in range(n):
@@ -32,7 +32,7 @@ def generar_grilla(n, k, probabilidad_muralla=0.3):
     
     # Se asegura de que el inicio y al menos k celdas sean usables (valor >= 1)
     inicio = (0, 0)
-    grilla[inicio[0]][inicio[1]] = random.randint(1, n//2)
+    grilla[inicio[0]][inicio[1]] = 1
     
     # Genera k salidas potenciales
     salidas = []
@@ -42,7 +42,7 @@ def generar_grilla(n, k, probabilidad_muralla=0.3):
         # Si la casilla NO ha sido designada como "estado de inicio" o "muralla"
         if (i, j) != inicio and grilla[i][j] != 0:
             salidas.append((i, j))
-            grilla[i][j] = random.randint(1, n//2) # Asigna un valor de salto aleatorio a la salida
+            #grilla[i][j] = random.randint(1, n//2) # Asigna un valor de salto aleatorio a la salida
         intentos += 1
     
     # Garantiza que la función cumpla con generar las k salidas después de los 100 intentos
@@ -98,6 +98,46 @@ def obtener_vecinos(posicion, grilla):
                 if camino_libre:
                     vecinos.append((ni, nj))
     return vecinos
+
+def obtener_camino_salto(desde, hasta):
+    """
+    Genera todas las casillas intermedias en un salto desde 'desde' hasta 'hasta'
+    """
+    i1, j1 = desde
+    i2, j2 = hasta
+    
+    # Calcular la dirección y distancia del salto
+    di = i2 - i1
+    dj = j2 - j1
+    pasos = max(abs(di), abs(dj))
+    
+    # Si es un movimiento de 1 casilla, solo incluir el destino
+    if abs(di) <= 1 and abs(dj) <= 1:
+        return [hasta]
+
+    # Determinar la dirección y número de pasos
+    camino_salto = []
+    
+    if di == 0:  # Movimiento horizontal
+        pasos = abs(dj)
+        direccion_j = 1 if dj > 0 else -1
+        for paso in range(1, pasos + 1):
+            pos_i = i1
+            pos_j = j1 + (paso * direccion_j)
+            camino_salto.append((pos_i, pos_j))
+    elif dj == 0:  # Movimiento vertical
+        pasos = abs(di)
+        direccion_i = 1 if di > 0 else -1
+        for paso in range(1, pasos + 1):
+            pos_i = i1 + (paso * direccion_i)
+            pos_j = j1
+            camino_salto.append((pos_i, pos_j))
+    else:
+        # No debería ocurrir en este tipo de laberinto (solo movimientos cardinales)
+        return [hasta]
+    
+    return camino_salto
+
 
 def dibujar_grilla(pantalla, grilla, inicio, meta, salidas, camino, fuente, modo, indice, total, victoria):
     filas = columnas = len(grilla) # NxN -> le damos el mismo valor a fila y columna
