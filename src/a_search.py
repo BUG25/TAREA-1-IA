@@ -12,7 +12,7 @@ class Cell:
 
 class a_star_agent:
     def calculate_h_value(self, row, col, dest):
-        return ((row - dest[0]) ** 2 + (col - dest[1]) ** 2) ** 0.5
+        return abs(row - dest[0]) + abs(col - dest[1])
 
     def is_unblocked(self, grid, estado):
         if grid[estado[0]][estado[1]] > 0:
