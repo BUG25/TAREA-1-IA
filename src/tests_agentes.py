@@ -55,7 +55,7 @@ def main():
 
             grilla_copia, grilla_cambio = generador_a_star.cambiar_murallas(grilla_copia, inicio, meta, salidas, pos_agente)
             if grilla_cambio:
-                print("El laberinto cambió, se recalculará el camino en el siguiente actuar.")
+                print("El laberinto cambió")
 
             
 
