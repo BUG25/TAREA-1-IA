@@ -138,6 +138,7 @@ class a_star_agent:
             return
 
     def actuar(self, cambio=False):
+        #Su no hay camino se intenta calcular uno nuevo
         if not self.camino:
             nuevo_camino = self.a_star_search(self.grid, self.pos, self.meta)
             if not nuevo_camino:
@@ -145,7 +146,23 @@ class a_star_agent:
                 return None
             # quitar la posición actual para devolver solo los pasos futuros
             self.camino = nuevo_camino[1:]
-
+        
+        if cambio:
+            casilla_bloqueada = False #Varíable para detectar si alguna casilla del camino ha sido bloqueada
+            for celda in self.camino:
+                if not self.is_unblocked(self.grid, celda): #Se detecta si alguna de las casillas está bloqueada
+                    casilla_bloqueada = True 
+                    break
+            if casilla_bloqueada: #Si hay alguna casilla bloqueada se recalcula el camino
+                nuevo_camino = self.a_star_search(self.grid, self.pos, self.meta)
+                if not nuevo_camino:
+                    print("No hay camino hacia la meta después del cambio")
+                    return None
+                # quitar la posición actual para devolver solo los pasos futuros
+                self.camino = nuevo_camino[1:]
+                print("Una celda del camino ha sido bloqueada, se recalcula nuevo camino con éxito")
+            else:
+                print("Ninguna celda ha sido bloqueada, se continua con el camino ya calculado")
         # tomar el siguiente paso
         if self.camino:
             siguiente = self.camino.pop(0)

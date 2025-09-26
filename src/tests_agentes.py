@@ -26,7 +26,7 @@ def main():
         print(f"\n=== Laberinto #{num_laberinto+1} ===")
         print("Meta verdadera:", meta)
         print("Salidas:", salidas)
-
+        print("Inicio:", inicio)
         generador_a_star = LaberintoGenerator(seed_global)
         grilla_copia = copy.deepcopy(grilla) #Se crea una copia para evitar modificar la original
 
@@ -56,7 +56,7 @@ def main():
 
             grilla_copia, grilla_cambio = generador_a_star.cambiar_murallas(grilla_copia, inicio, meta, salidas, pos_agente)
             if grilla_cambio:
-                print("El laberinto cambió, se recalculará el camino en el siguiente actuar.")
+                print("El laberinto cambió")
 
 
     # TESTALGORITMO GENÉTICO

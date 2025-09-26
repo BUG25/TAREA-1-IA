@@ -25,9 +25,10 @@ class LaberintoGenerator:
         salidas = []
         intentos = 0
         while len(salidas) < k and intentos < 100:
-            i = j = self.random.randint(0, n-1)
+            i = self.random.randint(0, n-1)
+            j = self.random.randint(0, n-1)
             # Si la casilla NO ha sido designada como "estado de inicio" o "muralla"
-            if (i, j) != inicio and grilla[i][j] != 0:
+            if (i, j) != inicio and grilla[i][j] != 0 and (i, j) not in salidas:
                 salidas.append((i, j))
                 #grilla[i][j] = random.randint(1, n//2) # Asigna un valor de salto aleatorio a la salida
             intentos += 1
