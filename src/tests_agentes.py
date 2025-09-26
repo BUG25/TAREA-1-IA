@@ -1,14 +1,14 @@
 import pygame
 import copy
 from a_search import a_star_agent
-from servicios import generar_grilla, dibujar_grilla, cambiar_murallas
+from servicios import generar_grilla, dibujar_grilla, cambiar_murallas, imprimir_grilla
 from laberinto_generator import LaberintoGenerator
 
 
 def main():
 
     # Parámetros de generación de laberintos
-    n = 10   # Tamaño de la grilla (NxN)
+    n = 50   # Tamaño de la grilla (NxN)
     k = 3   # Número de salidas
     num_laberintos = 100 # Número total de laberintos
     seed_global =50 #Seed para que los laberintos evolucionen de igual manera para ambos algoritmos
@@ -33,7 +33,8 @@ def main():
         a_star = a_star_agent(grilla_copia, inicio, salidas) #Se crea el agente que implementa A*
         grilla_cambio = False #Variable para saber si la grilla ha cambiado después de modificar_murallas
         pos_agente = inicio #Posición actual del agente
-        
+        casillas_visitadas = []
+        imprimir_grilla(grilla_copia, inicio, meta, salidas, casillas_visitadas, pos_agente)
         victoria = False 
 
         while victoria == False:
@@ -51,11 +52,14 @@ def main():
                 break
             
             pos_agente = siguiente_pos
+            casillas_visitadas.append(pos_agente)
             print("Agente se mueve a:", pos_agente)
+            imprimir_grilla(grilla_copia, inicio, meta, salidas, casillas_visitadas, pos_agente)
 
             grilla_copia, grilla_cambio = generador_a_star.cambiar_murallas(grilla_copia, inicio, meta, salidas, pos_agente)
             if grilla_cambio:
                 print("El laberinto cambió")
+                imprimir_grilla(grilla_copia, inicio, meta, salidas, casillas_visitadas, pos_agente)
 
             
 
