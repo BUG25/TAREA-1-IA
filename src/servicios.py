@@ -131,14 +131,14 @@ def dibujar_grilla(pantalla, grilla, inicio, meta, salidas, camino, fuente, modo
 
 def cambiar_murallas(grilla, inicio, meta, salidas, prob=0.1):
     n = len(grilla)
-    i = j = random.randint(1, n-1) # Para tomar una casilla (i, j) aleatoria dentro de la grilla
+    i = j = random.randint(1, n-1)                  # Para tomar una casilla (i, j) aleatoria dentro de la grilla
     # No mutar inicio ni meta ni las salidas ficticias
     if (i, j) == inicio or (i, j) == meta or (i, j) in salidas:
         return grilla
     if grilla[i][j] == 0:
         # Muralla puede abrirse
-        if random.random() < prob:
-            grilla[i][j] = random.randint(1, n//2)
+        if random.random() < prob:                  # "si un numero random entre 0 y 1 es menor a prob"
+            grilla[i][j] = random.randint(1, n//2)  # genera un int aleatorio entre 1 y n//2 y lo asigna a la celda
     else:
         # Celda libre puede volverse muralla
         if random.random() < prob:

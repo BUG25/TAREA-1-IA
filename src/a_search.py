@@ -25,7 +25,7 @@ class a_star_agent:
 
     #Se calcula el valor h usando una heurística manhattan
     def calculate_h_value(self, row, col, dest):
-        return abs(row - dest[0]) + abs(col - dest[1])
+        return abs(row - dest[0]) + abs(col - dest[1])  # devuelve el valor absoluto de la diferencia de filas más el valor absoluto de la diferencia de columnas
 
     #Se verifica si la celda está bloqueada
     def is_unblocked(self, grid, estado):
@@ -49,17 +49,19 @@ class a_star_agent:
         col = dest[1]
 
         # Se traza el camino utilizando los padres de las celdas, comenzando desde el destino
-        while not (cell_details[row][col].parent_i == row and cell_details[row][col].parent_j == col):
+        while not (cell_details[row][col].parent_i == row and cell_details[row][col].parent_j == col):  # "mientras no se haya llegado a la celda de inicio, es decir, la celda padre es ella misma"
+            # celda padre es una tupla (i, j) que sirve para rastrear el camino hacia atrás desde el destino hasta el inicio
             path.append((row, col))
             temp_row = cell_details[row][col].parent_i
             temp_col = cell_details[row][col].parent_j
+
+            # actualiza la fila y columna a la celda padre
             row = temp_row
             col = temp_col
 
-        # Se añade la celda de inicio al camini
-        path.append((row, col))
-        # Se invierte el camino para que tenga un orden desde el inicio hasta el destino
-        path.reverse()
+        
+        path.append((row, col))  # Se añade la celda de inicio al camino
+        path.reverse()           # Se invierte el camino para que tenga un orden desde el inicio hasta el destino
 
         # Print the path
         #for i in path:
@@ -70,10 +72,8 @@ class a_star_agent:
     def a_star_search(self, grid, inicio, destino):
         cantidad_filas = len(grid)
         cantidad_columnas = len(grid[0])
-        # Se inicializa la lista cerrada en donde se almacenarán las celdas visitadas
-        closed_list = [[False for _ in range(cantidad_columnas)] for _ in range(cantidad_filas)]
-        # Se inicializa un objeto celda por cada celda en la grilla
-        celdas = [[Cell() for _ in range(cantidad_columnas)] for _ in range(cantidad_filas)]
+        closed_list = [[False for _ in range(cantidad_columnas)] for _ in range(cantidad_filas)]  # Se inicializa la lista cerrada en donde se almacenarán las celdas visitadas
+        celdas = [[Cell() for _ in range(cantidad_columnas)] for _ in range(cantidad_filas)]      # Se inicializa un objeto celda por cada celda en la grilla
 
         #Se establecen los valores de la celda de inicio
         celdas[inicio[0]][inicio[1]].parent_i = inicio[0]
@@ -85,7 +85,7 @@ class a_star_agent:
         open_list = []
         heapq.heappush(open_list, (0.0, inicio[0], inicio[1]))
 
-         # Marcador para determinar si ha encontrado la celda de destino
+        # Marcador para determinar si ha encontrado la celda de destino
         found_dest = False
 
         # Ciclo principal del algoritmo

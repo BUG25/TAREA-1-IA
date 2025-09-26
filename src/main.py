@@ -1,5 +1,4 @@
 import pygame
-
 from dfs import DFS
 from servicios import generar_grilla, dibujar_grilla, cambiar_murallas
 
@@ -55,7 +54,7 @@ def main():
         tiempo_actual = pygame.time.get_ticks()
 
         # Cambiar las murallas de forma periodica
-        if tiempo_actual - ultimo_tiempo_cambio > 100: 
+        if tiempo_actual - ultimo_tiempo_cambio > 100:  # "si hay 100 ticks de diferencia"
             grilla = cambiar_murallas(grilla, inicio, meta, salidas)
             ultimo_tiempo_cambio = tiempo_actual
 
