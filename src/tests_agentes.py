@@ -14,6 +14,7 @@ def main():
     
     # Genera laberintos aleatorios
     laberintoGenerator = LaberintoGenerator(seed_global)  # Clase para generar laberintos que evolucionan de igual manera
+    laberintoGenerator = LaberintoGenerator(seed_global)  # Clase para generar laberintos que evolucionan de igual manera
     laberintos = []
     for _ in range(num_laberintos):
         inicio, meta, grilla, salidas = laberintoGenerator.generar_grilla(n, k)
