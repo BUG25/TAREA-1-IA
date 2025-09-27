@@ -9,17 +9,17 @@ class LaberintoGenerator:
     def generar_grilla(self, n, k, probabilidad_muralla=0.3):
         # Genera una grilla NxN aleatoria con murallas y k salidas
         # Con el valor "1" todas las casillas son transitables (inicialmente)
-        grilla = [[self.random.randint(1, n//2) for _ in range(n)] for _ in range(n)]
+        grilla = [[self.random.randint(1, n//2) for _ in range(n)] for _ in range(n)]  # "_" es una variable temporal que no se usa
         
         # Genera murallas
         for i in range(n):
             for j in range(n):
-                if self.random.random() < probabilidad_muralla:
-                    grilla[i][j] = 0 # (valor 0 representa muralla)
+                if self.random.random() < probabilidad_muralla:                        # "si el numero random entre 0 y 1 es menor a probabilidad_muralla"
+                    grilla[i][j] = 0                                                   # (valor 0 representa muralla)
         
         # Se asegura de que el inicio y al menos k celdas sean usables (valor >= 1)
         inicio = (0, 0)
-        grilla[inicio[0]][inicio[1]] = 1
+        grilla[inicio[0]][inicio[1]] = 1                                               # "inicio[0]" es la fila, "inicio[1]" es la columna
         
         # Genera k salidas potenciales
         salidas = []

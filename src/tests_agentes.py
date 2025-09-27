@@ -3,18 +3,19 @@ import copy
 from a_search import a_star_agent
 from servicios import generar_grilla, dibujar_grilla, cambiar_murallas, imprimir_grilla
 from laberinto_generator import LaberintoGenerator
+from agente_genetico import AgenteGenetico
 
 
 def main():
 
     # Parámetros de generación de laberintos
-    n = 50   # Tamaño de la grilla (NxN)
-    k = 3   # Número de salidas
-    num_laberintos = 100 # Número total de laberintos
-    seed_global =50 #Seed para que los laberintos evolucionen de igual manera para ambos algoritmos
+    n = 10                                                # Tamaño de la grilla (NxN)
+    k = 3                                                 # Número de salidas
+    num_laberintos = 100                                  # Número total de laberintos
+    seed_global =50                                       #Seed para que los laberintos evolucionen de igual manera para ambos algoritmos
     
     # Genera laberintos aleatorios
-    laberintoGenerator = LaberintoGenerator(seed_global) #Clase para generar laberintos que evolucionan de igual manera
+    laberintoGenerator = LaberintoGenerator(seed_global)  # Clase para generar laberintos que evolucionan de igual manera
     laberintos = []
     for _ in range(num_laberintos):
         inicio, meta, grilla, salidas = laberintoGenerator.generar_grilla(n, k)
@@ -35,6 +36,9 @@ def main():
         pos_agente = inicio #Posición actual del agente
         casillas_visitadas = []
         imprimir_grilla(grilla_copia, inicio, meta, salidas, casillas_visitadas, pos_agente)
+        grilla_cambio = False                                #Variable para saber si la grilla ha cambiado después de modificar_murallas
+        pos_agente = inicio                                  #Posición actual del agente
+        
         victoria = False 
 
         while victoria == False:
@@ -58,10 +62,41 @@ def main():
 
             grilla_copia, grilla_cambio = generador_a_star.cambiar_murallas(grilla_copia, inicio, meta, salidas, pos_agente)
             if grilla_cambio:
-                print("El laberinto cambió")
-                imprimir_grilla(grilla_copia, inicio, meta, salidas, casillas_visitadas, pos_agente)
+                print("El laberinto cambió, se recalculará el camino en el siguiente actuar.")
 
-            
+
+    # TESTALGORITMO GENÉTICO
+
+    for num_laberinto,(inicio, meta, grilla, salidas) in enumerate(laberintos):
+        print(f"\n=== Laberinto Genético #{num_laberinto+1} ===")
+        print("Meta verdadera:", meta)
+        print("Salidas:", salidas)
+
+        generador_genetico = LaberintoGenerator(seed_global)
+        grilla_copia = copy.deepcopy(grilla)
+
+        genetic_agent = AgenteGenetico(grilla_copia, inicio, meta)
+        grilla_cambio = False
+        pos_agente = inicio
+        victoria = False
+
+        while not victoria:
+            if pos_agente == meta:
+                print("Agente genético ha llegado a la meta")
+                victoria = True
+                break
+
+            siguiente_pos = genetic_agent.actuar(grilla_cambio)
+            if siguiente_pos is None:
+                print("No hay más movimientos posibles (genético).")
+                break
+
+            pos_agente = siguiente_pos
+            print("Agente genético se mueve a:", pos_agente)
+
+            grilla_copia, grilla_cambio = generador_genetico.cambiar_murallas(grilla_copia, inicio, meta, salidas, pos_agente)
+            if grilla_cambio:
+                print("El laberinto cambió, se recalculará el camino genético en el siguiente actuar.")
 
 
 if __name__ == "__main__":
