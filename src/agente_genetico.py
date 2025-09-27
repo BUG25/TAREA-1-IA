@@ -83,7 +83,6 @@ class AgenteGenetico:
                 # 30% de probabilidad de mutación dirigida hacia la meta
                 if random.random() < 0.3:
                     # Calcular dirección preferida hacia la meta desde posición actual
-                    # (Esto es una aproximación, en la práctica sería más complejo)
                     direcciones_preferenciales = DIRECCIONES
                     cromosoma_mutado.append(random.choice(direcciones_preferenciales))
                 else:
@@ -93,9 +92,8 @@ class AgenteGenetico:
                 cromosoma_mutado.append(gen)
         return cromosoma_mutado
 
+
     def evolucionar(self, inicio_camino):
-        print(f"Genético: Iniciando evolución desde {inicio_camino} hacia {self.meta}")
-        
         mejor_puntaje_actual = float('-inf')
         self.generaciones_sin_mejora = 0
         
@@ -114,7 +112,6 @@ class AgenteGenetico:
                 # Verificar si encontramos la meta
                 camino_actual = self.decodificar_camino(self.mejor_cromo, inicio_camino)
                 if len(camino_actual) > 0 and camino_actual[-1] == self.meta:
-                    print(f"Genético: ¡Meta encontrada en generación {generacion}!")
                     break
             else:
                 self.generaciones_sin_mejora += 1
@@ -123,13 +120,6 @@ class AgenteGenetico:
             if self.generaciones_sin_mejora > self.max_generaciones_sin_mejora:
                 print(f"Genético: Parada temprana en generación {generacion} por estancamiento")
                 break
-            
-            # Mostrar progreso cada 50 generaciones
-            if generacion % 50 == 0:
-                distancia = abs(self.decodificar_camino(self.mejor_cromo, inicio_camino)[-1][0] - self.meta[0]) + \
-                           abs(self.decodificar_camino(self.mejor_cromo, inicio_camino)[-1][1] - self.meta[1]) \
-                           if len(self.decodificar_camino(self.mejor_cromo, inicio_camino)) > 0 else float('inf')
-                print(f"Genético: Gen {generacion}, mejor puntaje: {mejor_puntaje_gen:.1f}, distancia a meta: {distancia}")
             
             # Crear nueva población
             nueva_poblacion = []
@@ -157,10 +147,6 @@ class AgenteGenetico:
         # Almacenar el mejor camino encontrado
         self.mejor_camino = self.decodificar_camino(self.mejor_cromo, inicio_camino)
         self.indice_turno = 0
-        
-        print(f"Genético: Evolución completada. Mejor camino tiene {len(self.mejor_camino)} pasos")
-        if len(self.mejor_camino) > 0:
-            print(f"Genético: Posición final: {self.mejor_camino[-1]}, Meta: {self.meta}")
 
     def decodificar_camino(self, cromosoma, inicio_camino):
         posicion = inicio_camino
@@ -191,7 +177,6 @@ class AgenteGenetico:
     def actuar(self, pos_actual, cuadricula_cambiada=False):
         # 1. Si el laberinto cambió, es obligatorio re-planificar desde donde estamos.
         if cuadricula_cambiada:
-            print(f"Genético: El laberinto cambió, recalculando desde {pos_actual}")
             self.evolucionar(pos_actual)
 
         # 2. Si después de todo, no tenemos un plan viable, nos rendimos.

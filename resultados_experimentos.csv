@@ -1,0 +1,3 @@
+algoritmo;num_laberintos;tamaño_laberinto;prob_cambio;tiempo_total_segundos
+A*;4;5;0.3;0.001941680908203125
+Genetico;4;5;0.3;13.840165138244629
