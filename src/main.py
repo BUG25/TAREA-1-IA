@@ -60,18 +60,18 @@ def simulacion(algoritmo_nombre, laberintos, seed, prob_cambio, n):
 
 def main():
     # Listas de parámetros a probar
-    tamaños_laberinto = [5, 10, 15, 20, 15] # Probar con laberintos de hasta 25x25
+    tamaños_laberinto = [10, 15, 20, 25] # Probar con laberintos de hasta 25x25
     cantidades_laberintos = [10, 50]    # Probar con 10 y 50 laberintos
     probabilidades_cambio = [0.1, 0.3, 0.5]  # Probar con 10%, 30%, 50% de probabilidad de cambiar las murallas
 
     seed_global = 50
-    k = 3 # Número de salidas 
 
     # Recopilar todos los resultados
     todos_los_resultados = []
 
     # Bucle principal para los experimentos
     for n in tamaños_laberinto:
+        k = n // 3  # Número de salidas 
         for num_labs in cantidades_laberintos:
             for prob in probabilidades_cambio:
                 
