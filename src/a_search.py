@@ -70,6 +70,8 @@ class a_star_agent:
         return path
 
     def a_star_search(self, grid, inicio, destino):
+        if destino is None:
+            return None
         cantidad_filas = len(grid)
         cantidad_columnas = len(grid[0])
         closed_list = [[False for _ in range(cantidad_columnas)] for _ in range(cantidad_filas)]  # Se inicializa la lista cerrada en donde se almacenarán las celdas visitadas
@@ -90,7 +92,7 @@ class a_star_agent:
 
         # Ciclo principal del algoritmo
         while len(open_list) > 0:
-            # Pop the cell with the smallest f value from the open list
+            # Se extrae la celda con el menor valor f de la lista abierta
             p = heapq.heappop(open_list)
 
             # Marca la celda como visitada
@@ -138,7 +140,7 @@ class a_star_agent:
             return
 
     def actuar(self, cambio=False):
-        #Su no hay camino se intenta calcular uno nuevo
+        #Si no hay camino se intenta calcular uno nuevo
         if not self.camino:
             nuevo_camino = self.a_star_search(self.grid, self.pos, self.meta)
             if not nuevo_camino:
@@ -174,6 +176,7 @@ class a_star_agent:
         if self.cola_metas.empty():
             print("Ya no quedan metas")
             self.meta = None
+            return
 
         
         metas_restantes = []
