@@ -1,8 +1,0 @@
-=== T1 v3.9 ===
-1. Generación aleatoria de grilla. Grilla NxN con murallas y k salidas, 1 válida.
-2. Modificación en obtener_vecinos(): ignora murallas y no permite saltos hacia murallas.
-3. Eliminación de control en teclado que no involucre búsqueda DFS
-
-=== T1 v4.0 ===
-1. Implementaciones visuales: murallas café y colores de salidas.
-2. Nuevos controles.
