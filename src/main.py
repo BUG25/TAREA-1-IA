@@ -42,8 +42,10 @@ def simulacion(algoritmo_nombre, laberintos, seed, prob_cambio, n):
                 if posicion in salidas and posicion != meta:
                     agente.actualizar_meta()
                 siguiente_paso = agente.actuar(cambio)
+                print("A* se mueve a: ", siguiente_paso)
             else: # Genetico
                 siguiente_paso = agente.actuar(posicion, cambio)
+                print("Genetico se mueve a: ", siguiente_paso)
             
             if siguiente_paso is None:
                 victoria = True
