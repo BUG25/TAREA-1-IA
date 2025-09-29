@@ -20,7 +20,7 @@ source venv/bin/activate
 
 Luego instalar las dependencias necesarias: 
 ```bash
-pip install -r requirements.txt
+pip install -r requeriments.txt
 ```
 Una vez hecho los pasos anteriores, se puede ejecutar los tests (desde la carpeta raiz): 
 ```python
